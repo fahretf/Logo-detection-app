@@ -9,21 +9,21 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
     "Dataset/train",
     image_size=(img_height, img_width),
     batch_size=batch_size,
-    shuffle=True  # Add this line to shuffle the images
+    shuffle=True  
 )
 
 val_ds = tf.keras.utils.image_dataset_from_directory(
     "Dataset/validation",
     image_size=(img_height, img_width),
     batch_size=batch_size,
-    shuffle=True  # Add this line to shuffle the images
+    shuffle=True 
 )
 
 test_ds = tf.keras.utils.image_dataset_from_directory(
     "Dataset/test",
     image_size=(img_height, img_width),
     batch_size=batch_size,
-    shuffle=True  # Add this line to shuffle the images
+    shuffle=True  
 )
 class_names = ["apple", "asus", "barcelona", "chipsy", "cocacola", "dell", "fanta", "google", "gorenje", "hp", "lenovo", "lg", "microsoft", "nike", "niveamen", "pepsi", "philips", "redbull", "samsung", "sebamed"]
 plt.figure(figsize=(10,10))
