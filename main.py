@@ -1,5 +1,3 @@
-!wget https://bitbucket.org/ffijuljani1/logo-recognition/raw/50f2d59f58b6e75de9f39533befd6aa1f01273f0/Dataset.zip
-!unzip Dataset.zip
 import tensorflow as tf
 import matplotlib.pyplot as plt
 img_height, img_width= 256, 256
@@ -34,24 +32,36 @@ for images, labels in train_ds.take(1):
     plt.title(class_names[labels[i]])
     plt.axis("off")
 
-model = tf.keras.Sequential(
-    [
-        tf.keras.layers.Rescaling(1./255.),
-        tf.keras.layers.Conv2D(32, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Conv2D(32, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Conv2D(32, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dense(20)
+model = tf.keras.Sequential([
+    tf.keras.layers.InputLayer(input_shape=input_shape),
+    tf.keras.layers.Rescaling(1./255),
 
-    ]
-)
+    tf.keras.layers.Conv2D(32, (3, 3), padding='same', activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Conv2D(32, (3, 3), padding='same', activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.MaxPooling2D((2, 2)),
+
+    tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.MaxPooling2D((2, 2)),
+
+    tf.keras.layers.Conv2D(128, (3, 3), padding='same', activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Conv2D(128, (3, 3), padding='same', activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.MaxPooling2D((2, 2)),
+
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(num_classes, activation='softmax')
+])
 model.compile(
     optimizer='adam',
-    loss=tf.losses.SparseCategoricalCrossentropy(from_logits = True),
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(),
     metrics=['accuracy']
 )
 model.fit(
